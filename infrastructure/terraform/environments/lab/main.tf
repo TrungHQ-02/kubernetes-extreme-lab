@@ -83,10 +83,10 @@ locals {
 
   # Tags for resource management
   common_tags = {
-    vironment = local.environment
-    ManagedBy = "terraform"
-    oject     = "kubernetes-extreme-lab"
-    Owner     = "platform-team"
+    Environment = local.environment
+    ManagedBy   = "terraform"
+    Project     = "kubernetes-extreme-lab"
+    Owner       = "platform-team"
   }
 }
 
