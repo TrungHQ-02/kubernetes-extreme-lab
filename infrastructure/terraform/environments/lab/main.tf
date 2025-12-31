@@ -127,3 +127,37 @@ module "k3s_cluster" {
   depends_on = [module.vm]
 }
 
+##############################################################################
+# DNS Module - Azure DNS Zone
+##############################################################################
+
+module "dns" {
+  source = "../../modules/dns"
+
+  domain_name         = local.domain
+  resource_group_name = azurerm_resource_group.main.name
+
+  # A Records - Point to VM public IP
+  a_records = {
+    "auth" = {
+      ttl     = 300
+      records = [module.vm.public_ip_address]
+    }
+    # Root domain (optional)
+    "@" = {
+      ttl     = 300
+      records = [module.vm.public_ip_address]
+    }
+  }
+
+  # CNAME Records (optional - for additional subdomains)
+  cname_records = {
+    # Example: "www" = {
+    #   ttl    = 300
+    #   record = local.domain
+    # }
+  }
+
+  tags       = local.common_tags
+  depends_on = [azurerm_resource_group.main, module.vm]
+}
